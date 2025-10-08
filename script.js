@@ -136,7 +136,10 @@ function loadGallery() {
     ];
     
     // Combinar imágenes originales con las nuevas
-    const allImages = [...originalImages.map(img => ({ src: `./images/${img}`, type: 'original' })), ...imagesList];
+    const allImages = [
+        ...originalImages.map(img => ({ src: `./images/${img}`, type: 'original', id: img })),
+        ...imagesList.map((img, idx) => ({ ...img, id: `uploaded_${idx}` }))
+    ];
     
     // Limpiar galería
     galleryGrid.innerHTML = '';
@@ -158,11 +161,51 @@ function loadGallery() {
             this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect fill="%23ddd" width="400" height="400"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em" font-family="sans-serif" font-size="18"%3EImagen no disponible%3C/text%3E%3C/svg%3E';
         };
         
+        // Agregar botón de eliminar
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.innerHTML = '🗑️';
+        deleteBtn.title = 'Eliminar imagen';
+        deleteBtn.onclick = (e) => {
+            e.stopPropagation();
+            deleteImage(image.id, image.type);
+        };
+        
         galleryItem.appendChild(img);
-        galleryItem.onclick = () => openModal(img.src, img.alt);
+        galleryItem.appendChild(deleteBtn);
+        
+        // Hacer clic en la imagen para abrir modal
+        img.onclick = () => openModal(img.src, img.alt);
         
         galleryGrid.appendChild(galleryItem);
     });
+}
+
+// Eliminar imagen
+function deleteImage(imageId, imageType) {
+    // Confirmar eliminación
+    if (!confirm('¿Estás seguro de que deseas eliminar esta imagen?')) {
+        return;
+    }
+    
+    if (imageType === 'uploaded') {
+        // Eliminar imagen subida por el usuario
+        let savedImages = localStorage.getItem('sancapurris_images');
+        let imagesList = savedImages ? JSON.parse(savedImages) : [];
+        
+        // Filtrar la imagen eliminada
+        const updatedList = imagesList.filter((img, idx) => `uploaded_${idx}` !== imageId);
+        
+        localStorage.setItem('sancapurris_images', JSON.stringify(updatedList));
+        
+        // Recargar galería
+        loadGallery();
+        
+        showNotification('Imagen eliminada exitosamente', 'success');
+    } else {
+        // No se pueden eliminar imágenes originales
+        showNotification('No se pueden eliminar las imágenes originales de la galería', 'error');
+    }
 }
 
 // Manejar subida de nueva imagen
