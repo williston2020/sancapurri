@@ -37,11 +37,12 @@ const members = [
     "Lorena Quintero",
     "Marbella Rivero",
     "Freddy Rodríguez",
-    "Humbeimar",
+    "Beimar",
     "Erik",
     "Ángel",
     "María Pernia",
     "Yoximar",
+    "Santiago",
     "Juscely",
     "Argenis",
     "Yorley"
@@ -275,40 +276,51 @@ function deleteImage(imageId, imageType) {
 
 // Manejar subida de nueva imagen a la galería
 function handleGalleryImageUpload(event) {
-    const file = event.target.files[0];
-    
-    if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-            const imageData = e.target.result;
-            
-            // Guardar imagen en localStorage
-            let savedImages = localStorage.getItem('sancapurris_images');
-            let imagesList = savedImages ? JSON.parse(savedImages) : [];
-            
-            imagesList.push({
-                src: imageData,
-                type: 'uploaded',
-                date: new Date().toISOString()
-            });
-            
-            localStorage.setItem('sancapurris_images', JSON.stringify(imagesList));
-            
-            // Recargar galería
-            loadGallery();
-            
-            // Mostrar mensaje de éxito
-            showNotification('¡Imagen agregada exitosamente a la galería! 🎉');
-        };
-        
-        reader.readAsDataURL(file);
-    } else {
-        showNotification('Por favor selecciona un archivo de imagen válido', 'error');
+    const files = event.target.files;
+    if (files.length === 0) {
+        showNotification(\'No se seleccionaron archivos\', \'error\');
+        return;
     }
-    
-    // Limpiar input
-    event.target.value = '';
+
+    let imagesProcessed = 0;
+    let imagesAddedCount = 0;
+    let savedImages = localStorage.getItem(\'sancapurris_images\');
+    let imagesList = savedImages ? JSON.parse(savedImages) : [];
+
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file && file.type.startsWith(\'image/\')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageData = e.target.result;
+                imagesList.push({
+                    src: imageData,
+                    type: \'uploaded\',
+                    date: new Date().toISOString()
+                });
+                imagesAddedCount++;
+                imagesProcessed++;
+                if (imagesProcessed === files.length) {
+                    localStorage.setItem(\'sancapurris_images\', JSON.stringify(imagesList));
+                    loadGallery();
+                    showNotification(`¡${imagesAddedCount} imagen(es) agregada(s) exitosamente a la galería! 🎉`);
+                }
+            };
+            reader.readAsDataURL(file);
+        } else {
+            imagesProcessed++;
+            if (imagesProcessed === files.length) {
+                if (imagesAddedCount > 0) {
+                    localStorage.setItem(\'sancapurris_images\', JSON.stringify(imagesList));
+                    loadGallery();
+                    showNotification(`¡${imagesAddedCount} imagen(es) agregada(s) exitosamente a la galería! 🎉`);
+                } else {
+                    showNotification(\'No se agregaron imágenes válidas\', \'error\');
+                }
+            }
+        }
+    }
+    event.target.value = \'\'; // Limpiar input
 }
 
 // Mostrar notificación
