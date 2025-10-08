@@ -30,6 +30,72 @@ function animateCounter(targetValue) {
     }, stepTime);
 }
 
+// Lista de integrantes
+const members = [
+    "Zoleyda Quintero",
+    "Luzmar Quintero",
+    "Lorena Quintero",
+    "Marbella Rivero",
+    "Freddy Rodríguez",
+    "Beimar",
+    "Erik",
+    "Ángel",
+    "María Pernia",
+    "Yoximar",
+    "Santiago",
+    "Juscely",
+    "Argenis",
+    "Yorley"
+];
+
+// Cargar integrantes y sus fotos de perfil
+function loadMembers() {
+    const membersGrid = document.getElementById('membersGrid');
+    membersGrid.innerHTML = ''; // Limpiar el grid antes de cargar
+
+    members.forEach((member, index) => {
+        const memberCard = document.createElement('div');
+        memberCard.className = 'member-card';
+
+        const memberId = member.replace(/\s+/g, '-').toLowerCase();
+        const savedProfilePic = localStorage.getItem(`profilePic_${memberId}`);
+        const profilePicSrc = savedProfilePic || 'https://via.placeholder.com/100/cccccc/ffffff?text=👤'; // Imagen por defecto
+
+        memberCard.innerHTML = `
+            <div class="profile-pic-container">
+                <img src="${profilePicSrc}" alt="Foto de perfil de ${member}" class="profile-pic" id="profilePic_${memberId}">
+                <label for="uploadProfilePic_${memberId}" class="upload-icon" title="Cambiar foto de perfil">
+                    📸
+                </label>
+                <input type="file" id="uploadProfilePic_${memberId}" accept="image/*" style="display: none;" onchange="handleProfilePicUpload(event, '${memberId}')">
+            </div>
+            <span class="member-name">${member}</span>
+        `;
+        membersGrid.appendChild(memberCard);
+    });
+}
+
+// Manejar subida de foto de perfil
+function handleProfilePicUpload(event, memberId) {
+    const file = event.target.files[0];
+
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const imageData = e.target.result;
+            localStorage.setItem(`profilePic_${memberId}`, imageData);
+            document.getElementById(`profilePic_${memberId}`).src = imageData;
+            showNotification('Foto de perfil actualizada exitosamente', 'success');
+        };
+
+        reader.readAsDataURL(file);
+    } else {
+        showNotification('Por favor selecciona un archivo de imagen válido', 'error');
+    }
+    event.target.value = ''; // Limpiar input
+}
+
 // Cargar imágenes de la galería
 function loadGallery() {
     const galleryGrid = document.getElementById('galleryGrid');
@@ -208,8 +274,8 @@ function deleteImage(imageId, imageType) {
     }
 }
 
-// Manejar subida de nueva imagen
-function handleImageUpload(event) {
+// Manejar subida de nueva imagen a la galería
+function handleGalleryImageUpload(event) {
     const file = event.target.files[0];
     
     if (file && file.type.startsWith('image/')) {
@@ -234,7 +300,7 @@ function handleImageUpload(event) {
             loadGallery();
             
             // Mostrar mensaje de éxito
-            showNotification('¡Imagen agregada exitosamente! 🎉');
+            showNotification('¡Imagen agregada exitosamente a la galería! 🎉');
         };
         
         reader.readAsDataURL(file);
@@ -334,5 +400,7 @@ document.head.appendChild(style);
 // Inicializar al cargar la página
 window.addEventListener('DOMContentLoaded', function() {
     initVisitCounter();
+    loadMembers(); // Cargar los integrantes
     loadGallery();
 });
+

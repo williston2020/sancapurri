@@ -30,22 +30,8 @@
     <section class="members-section">
         <div class="container">
             <h2 class="section-title">Nuestros Integrantes</h2>
-            <div class="members-grid">
-                <div class="member-card">👤 Zoleyda Quintero</div>
-                <div class="member-card">👤 Luzmar Quintero</div>
-                <div class="member-card">👤 Lorena Quintero</div>
-                <div class="member-card">👤 Marbella Rivero</div>
-                <div class="member-card">👤 Freddy Rodríguez</div>
-                <div class="member-card">👤 Beimar</div>
-                <div class="member-card">👤 Erik</div>
-                <div class="member-card">👤 Ángel</div>
-                <div class="member-card">👤 María Pernia</div>
-                <div class="member-card">👤 Yoximar</div>
-                <div class="member-card">👤 Santiago</div>
-                <div class="member-card">👤 Juscely</div>
-                <div class="member-card">👤 Argenis</div>
-                <div class="member-card">👤 Yorley</div>
-                
+            <div class="members-grid" id="membersGrid">
+                <!-- Los integrantes se cargarán dinámicamente -->
             </div>
         </div>
     </section>
@@ -55,9 +41,9 @@
         <div class="container">
             <button class="btn-add-image" onclick="document.getElementById('imageUpload').click()">
                 <span class="btn-icon">📸</span>
-                Agregar Nueva Imagen
+                Agregar Nueva Imagen a Galería
             </button>
-            <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="handleGalleryImageUpload(event)">
         </div>
     </div>
 
@@ -89,3 +75,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+
