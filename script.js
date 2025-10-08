@@ -37,12 +37,11 @@ const members = [
     "Lorena Quintero",
     "Marbella Rivero",
     "Freddy Rodríguez",
-    "Beimar",
+    "Humbeimar",
     "Erik",
     "Ángel",
     "María Pernia",
     "Yoximar",
-    "Santiago",
     "Juscely",
     "Argenis",
     "Yorley"
