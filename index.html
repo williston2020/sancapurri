@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Los Sancapurris - Aventuras y Momentos Especiales</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">🎉 Los Sancapurris</h1>
+            <p class="tagline">Compartiendo aventuras, paseos y momentos inolvidables</p>
+        </div>
+    </header>
+
+    <!-- Contador de Visitas -->
+    <div class="visit-counter">
+        <div class="container">
+            <div class="counter-box">
+                <span class="counter-icon">👥</span>
+                <span class="counter-label">Visitas:</span>
+                <span class="counter-value" id="visitCounter">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Integrantes -->
+    <section class="members-section">
+        <div class="container">
+            <h2 class="section-title">Nuestros Integrantes</h2>
+            <div class="members-grid" id="membersGrid">
+                <!-- Los integrantes se cargarán dinámicamente -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Botón para Agregar Imagen -->
+    <div class="add-image-section">
+        <div class="container">
+            <button class="btn-add-image" onclick="document.getElementById('imageUpload').click()">
+                <span class="btn-icon">📸</span>
+                Agregar Nueva Imagen a Galería
+            </button>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="handleGalleryImageUpload(event)">
+            <button class="btn-add-image" onclick="document.getElementById(\'multipleImageUpload\').click()">
+                <span class="btn-icon">🖼️</span>
+                Agregar Múltiples Imágenes a Galería
+            </button>
+            <input type="file" id="multipleImageUpload" accept="image/*" multiple style="display: none;" onchange="handleMultipleGalleryImageUpload(event)">
+        </div>
+    </div>
+
+    <!-- Galería de Fotos -->
+    <section class="gallery-section">
+        <div class="container">
+            <h2 class="section-title">Nuestra Galería de Momentos</h2>
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Las imágenes se cargarán dinámicamente -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal para ver imagen en grande -->
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div id="caption"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Los Sancapurris - Unidos por el bienestar de todos</p>
+            <p class="footer-subtitle">Compartiendo momentos, creando recuerdos 💙</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
